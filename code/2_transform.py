@@ -5,15 +5,15 @@ import pandaslib as pl
 
 def process_salary_survey():
         # load survey data from cache
-    surveys_data = pd.read_csv('cache/survey_responses.csv')
+    surveys_data = pd.read_csv('cache/survey.csv')
 
     # load the states data from cache
-    state_data = pd.read_csv('cache/state_reference.csv')
+    state_data = pd.read_csv('cache/states.csv')
 
     # load list of col data from cache
     cols = []
     for year in surveys_data['year'].unique():
-        col = pd.read_csv(f'cache/living_cost_{year}.csv')
+        col = pd.read_csv(f'cache/col_{year}.csv')
         cols.append(col)
 
     # combine all col data into one dataframe

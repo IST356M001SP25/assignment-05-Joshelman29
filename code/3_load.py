@@ -39,6 +39,9 @@ def upload_file(file_name, bucket_name, object_name=None):
         return False
     return True
 
-if __name__ == '__main__':
-    #TODO: Write your load code here (remove pass first)
-    pass
+
+data_files = ['cache/survey_dataset.csv', 'cache/annual_salary_adjusted_by_location_and_age.csv', 'cache/annual_salary_adjusted_by_location_and_education.csv']
+bucket = "ist356mafudge"
+for csv in data_files:
+    obj = csv.replace('cache/', '')
+    upload_file(csv, bucket, obj)

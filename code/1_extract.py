@@ -17,8 +17,8 @@ def fetch_and_process_survey_data() -> Dict[str, pd.DataFrame]:
     # intitializing storage for processed data
     processed_data = {
         'survey_data': None,
-        'cost_of_living': {},
-        'state_reference': None
+        'col': {},
+        'states': None
     }
     
     # configuring for data sources
@@ -30,7 +30,7 @@ def fetch_and_process_survey_data() -> Dict[str, pd.DataFrame]:
     try:
         response_data = pd.read_csv(survey_source)
         response_data['year'] = response_data['Timestamp'].apply(pl.extract_year_mdy)
-        response_data.to_csv('cache/survey_responses.csv', index=False)
+        response_data.to_csv('cache/survey.csv', index=False)
         processed_data['survey_data'] = response_data
         
         # getting unique years for cost of living data
@@ -42,15 +42,15 @@ def fetch_and_process_survey_data() -> Dict[str, pd.DataFrame]:
                 col_tables = pd.read_html(col_base_url.format(year=yr))
                 living_cost_df = col_tables[1].copy()
                 living_cost_df['year'] = yr
-                living_cost_df.to_csv(f'cache/living_cost_{yr}.csv', index=False)
-                processed_data['cost_of_living'][str(yr)] = living_cost_df
+                living_cost_df.to_csv(f'cache/col_{yr}.csv', index=False)
+                processed_data['col_'][str(yr)] = living_cost_df
             except Exception as e:
                 st.warning(f"Failed to fetch cost of living data for {yr}: {str(e)}")
         
         # processing state reference data
         state_data = pd.read_csv(state_ref_source)
-        state_data.to_csv('cache/state_reference.csv', index=False)
-        processed_data['state_reference'] = state_data
+        state_data.to_csv('cache/states.csv', index=False)
+        processed_data['states'] = state_data
         
     except Exception as e:
         st.error(f"Error in data processing pipeline: {str(e)}")
