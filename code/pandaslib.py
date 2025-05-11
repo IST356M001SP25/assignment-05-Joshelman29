@@ -1,16 +1,21 @@
 from datetime import datetime
 
-def clean_currency(item: str) -> float:
+def clean_currency(number: str) -> float:
     '''
-    remove anything from the item that prevents it from being converted to a float
+    remove anything from the number that prevents it from being converted to a float
     '''    
-    return 
+    currency = float(str(number).replace(',', '').replace('$', ''))
+    return currency
 
-def extract_year_mdy(timestamp):
+def extract_year_mdy(tstamp: str) -> int:
     '''
-    use the datatime.strptime to parse the date and then extract the year
+    use the datetime.strptime to parse the date and then extract the year
+    Expected format: MM/DD/YYYY HH:MM:SS (e.g., "05/15/2023 14:30:00")
+    Returns the year as an integer
+    
     '''
-    return 
+    year = datetime.strptime(tstamp, '%m/%d/%Y %H:%M:%S').year
+    return year
 
 def clean_country_usa(item: str) ->str:
     '''
@@ -20,7 +25,15 @@ def clean_country_usa(item: str) ->str:
     possibilities = [
         'united states of america', 'usa', 'us', 'united states', 'u.s.'
     ]
-    return
+    lower_item = item.lower().strip()
+    
+    # Check against all possible variations
+    for variant in possibilities:
+        if lower_item == variant:
+            return "United States"
+    
+    # Return original if no match found
+    return item
 
 
 if __name__=='__main__':
